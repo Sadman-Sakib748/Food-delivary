@@ -8,6 +8,14 @@ import SpecialOffers from '@/components/SpecialOffers'
 import PopularItemsDynamic from '@/components/PopularItemsDynamic'
 import TopCuisineDynamic from '@/components/TopCuisineDynamic'
 import MarqueeSection from '@/components/MarqueeSection'
+import FoodCompare from '@/components/FoodCompare'
+import PopularBlogs from '@/components/PopularBlogs'
+import RestaurantSection from '@/components/RestaurantSection'
+import Stats from '@/components/Stats'
+import Services from '@/components/Services'
+import FAQSection from '@/components/FAQSection'
+import OurPartner from '@/components/OurPartner'
+import CustomersReview from '@/components/CustomersReview'
 
 export default function HomePage() {
 
@@ -20,6 +28,14 @@ export default function HomePage() {
       <PopularItemsDynamic />
       <TopCuisineDynamic />
       <MarqueeSection />
+      <FoodCompare />
+      <PopularBlogs />
+      <RestaurantSection />
+      <Stats />
+      <Services />
+      <FAQSection />
+      <OurPartner />
+      <CustomersReview />
     </div>
   )
 }
