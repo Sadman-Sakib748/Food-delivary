@@ -154,56 +154,75 @@ export default function LoginPage() {  // ← এখানে LoginPage ব্�
             </div>
 
             {/* Demo Users */}
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               <button
                 type="button"
                 onClick={() => handleDemoUser({
-                  email: "demo-admin-1@fastfeast.com",
-                  password: "demo-admin-1",
+                  email: "admin@gmail.com",
+                  password: "admin123456",
                 })}
-                className="bg-purple-100 hover:bg-purple-200 text-purple-700 text-xs py-1.5 px-3 rounded-full transition-colors"
+                className="group relative bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white text-xs font-medium py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
               >
-                Admin
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">👑</span>
+                  Admin
+                </span>
               </button>
+
               <button
                 type="button"
                 onClick={() => handleDemoUser({
                   email: "demo-moderator-1@fastfeast.com",
                   password: "demo-moderator-1",
                 })}
-                className="bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs py-1.5 px-3 rounded-full transition-colors"
+                className="group relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-xs font-medium py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
               >
-                Moderator
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">🛡️</span>
+                  Moderator
+                </span>
               </button>
+
               <button
                 type="button"
                 onClick={() => handleDemoUser({
-                  email: "demo-restaurantOwner-3@fastfeast.com",
-                  password: "demo-restaurantOwner-3",
+                  email: "moderator@gmail.com",
+                  password: "moderator123456",
                 })}
-                className="bg-amber-100 hover:bg-amber-200 text-amber-700 text-xs py-1.5 px-3 rounded-full transition-colors"
+                className="group relative bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-medium py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
               >
-                Restaurant
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">🏪</span>
+                  Restaurant
+                </span>
               </button>
+
               <button
                 type="button"
                 onClick={() => handleDemoUser({
-                  email: "demo-rider-2@fastfeast.com",
-                  password: "demo-rider-2",
+                  email: "owner@gmail.com",
+                  password: "owner123456",
                 })}
-                className="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-xs py-1.5 px-3 rounded-full transition-colors"
+                className="group relative bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white text-xs font-medium py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
               >
-                Rider
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">🏍️</span>
+                  Rider
+                </span>
               </button>
+
               <button
                 type="button"
                 onClick={() => handleDemoUser({
-                  email: "demo-user-3@fastfeast.com",
-                  password: "demo-user-3",
+                  email: "rider@gmail.com",
+                  password: "rider123456",
                 })}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs py-1.5 px-3 rounded-full transition-colors"
+                className="group relative bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white text-xs font-medium py-2 px-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
               >
-                User
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">👤</span>
+                  User
+                </span>
               </button>
             </div>
 

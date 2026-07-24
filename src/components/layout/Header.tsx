@@ -1,25 +1,37 @@
+// components/Header.tsx
 "use client"
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { 
-  Menu, X, ShoppingBag, User, LogOut, 
+import {
+  Menu, X, ShoppingBag, User, LogOut,
   LayoutDashboard, Store, Truck, Heart,
   Home, BookOpen, MapPin, Info, Mail
 } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { cn } from '@/lib/api/utils'
 
-
 export default function Header() {
   const { data: session, status } = useSession()
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const totalItems = useCartStore((state) => state.getTotalItems())
+  const [isHydrated, setIsHydrated] = useState(false)
 
+  // Get cart functions
+  const totalItems = useCartStore((state) => state.getTotalItems())
+  const resetStore = useCartStore((state) => state.resetStore)
+  const isStoreHydrated = useCartStore((state) => state.isHydrated)
+
+  // Check hydration
+  useEffect(() => {
+    setIsHydrated(isStoreHydrated)
+  }, [isStoreHydrated])
+
+  // Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
@@ -28,6 +40,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Auth pages check
   const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password'].includes(pathname)
   if (isAuthPage) return null
 
@@ -46,6 +59,45 @@ export default function Header() {
     if (role === 'restaurant') return '/restaurant'
     if (role === 'rider') return '/rider'
     return '/customer'
+  }
+
+  // ✅ Correct logout function for NextAuth
+  const handleLogout = async () => {
+    try {
+      // 1. First reset cart store
+      resetStore()
+      
+      // 2. Clear all storage manually
+      if (typeof window !== 'undefined') {
+        // Clear all cart-related storage
+        const cartKeys = ['cart-storage', 'persist:cart-storage', 'cart', 'food-cart', 'cartItems']
+        cartKeys.forEach(key => {
+          localStorage.removeItem(key)
+          sessionStorage.removeItem(key)
+        })
+        
+        // Clear auth tokens
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        
+        // Clear session storage
+        sessionStorage.clear()
+      }
+
+      // 3. Sign out from NextAuth (এটা গুরুত্বপূর্ণ!)
+      await signOut({
+        redirect: false,
+        callbackUrl: '/login'
+      })
+
+      // 4. Force redirect with hard navigation
+      window.location.href = '/login'
+      
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Fallback
+      window.location.href = '/login'
+    }
   }
 
   return (
@@ -98,10 +150,10 @@ export default function Header() {
 
         {/* Right: Icons & User */}
         <div className="flex items-center gap-3">
-          {/* Cart */}
+          {/* Cart - Fixed hydration issue */}
           <Link href="/cart" className="relative text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50">
             <ShoppingBag size={22} />
-            {totalItems > 0 && (
+            {isHydrated && totalItems > 0 && status === 'authenticated' && (
               <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems}
               </span>
@@ -171,7 +223,7 @@ export default function Header() {
                 </Link>
 
                 <button
-                  onClick={() => signOut()}
+                  onClick={handleLogout}
                   className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 w-full transition-colors"
                 >
                   <LogOut size={16} /> Logout
