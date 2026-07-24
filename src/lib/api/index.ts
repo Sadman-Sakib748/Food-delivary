@@ -124,15 +124,15 @@ export const authAPI = {
     return response.data
   },
 
-  forgotPassword: async (data: { email: string }) => {
-    const response = await api.post('/auth/forgot-password', data)
-    return response.data
-  },
+  // forgotPassword: async (data: { email: string }) => {
+  //   const response = await api.post('/auth/forgot-password', data)
+  //   return response.data
+  // },
 
-  resetPassword: async (data: { token: string; newPassword: string }) => {
-    const response = await api.post('/auth/reset-password', data)
-    return response.data
-  },
+  // resetPassword: async (data: { token: string; newPassword: string }) => {
+  //   const response = await api.post('/auth/reset-password', data)
+  //   return response.data
+  // },
 
   logout: async () => {
     const response = await api.post('/auth/logout')
