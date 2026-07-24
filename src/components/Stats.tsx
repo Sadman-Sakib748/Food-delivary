@@ -69,10 +69,8 @@ export default function Stats() {
             ref={sectionRef}
             className="relative flex flex-col md:min-h-screen w-full overflow-hidden py-4"
         >
-            {/* Dark overlay for readability (optional) */}
             <div className="absolute inset-0 flex-grow-1"></div>
 
-            {/* Main Container */}
             <div className="relative container mx-auto px-4 z-10 h-full flex flex-col">
                 {/* Text and Image Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 py-6 md:pt-10 md:pb-8 flex-grow">
@@ -90,18 +88,9 @@ export default function Stats() {
 
                     {/* Image Section with continuous flying animation */}
                     <div className="relative flex justify-center items-center w-full py-4 md:py-0">
-                        <motion.div
-                            animate={{
-                                x: [0, 50, 0],
-                                opacity: [1, 0.8, 1],
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                repeatType: "loop",
-                                ease: "easeInOut",
-                            }}
-                            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80"
+                        {/* ✅ FIX: Use regular div with CSS animation instead of motion.div */}
+                        <div
+                            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 animate-float"
                         >
                             <Image
                                 src="https://i.ibb.co.com/0gxb4sS/Untitled-500-x-500-px.png"
@@ -111,7 +100,7 @@ export default function Stats() {
                                 className="object-contain w-full h-full"
                                 unoptimized
                             />
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
 
@@ -147,6 +136,27 @@ export default function Stats() {
                     </div>
                 </div>
             </div>
+
+            {/* CSS Animation */}
+            <style jsx>{`
+                @keyframes float {
+                    0% {
+                        transform: translateX(0px);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: translateX(50px);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateX(0px);
+                        opacity: 1;
+                    }
+                }
+                .animate-float {
+                    animation: float 3s ease-in-out infinite;
+                }
+            `}</style>
         </section>
     );
 }

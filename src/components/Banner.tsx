@@ -1,14 +1,14 @@
-// src/app/components/Banner.tsx
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect, useMemo, useCallback, ReactNode } from "react";
-import "swiper/css";
-import "swiper/css/effect-fade";
 import { useRouter } from "next/navigation";
 import type { Swiper as SwiperType } from 'swiper';
+
+// ✅ FIX: Use single CSS import
+import 'swiper/swiper-bundle.css';
 
 // Types
 interface SlideContent {
@@ -158,7 +158,6 @@ declare global {
 const Banner = () => {
     const router = useRouter();
 
-    // Local state instead of Redux
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [location, setLocation] = useState<string>("");
     const [isLocationOpen, setIsLocationOpen] = useState<boolean>(false);
@@ -176,7 +175,6 @@ const Banner = () => {
         []
     );
 
-    // Check if speech recognition is supported
     useEffect(() => {
         let isMounted = true;
 
@@ -229,7 +227,6 @@ const Banner = () => {
         };
     }, []);
 
-    // Memoized callbacks
     const handleLocationSelect = useCallback(
         (selectedLocation: string) => {
             setLocation(selectedLocation);
@@ -245,7 +242,6 @@ const Banner = () => {
                 if (keyboardEvent.key !== "Enter") return;
             }
             if (searchQuery || location) {
-                // Pass search params to URL
                 const params = new URLSearchParams();
                 if (searchQuery) params.append('search', searchQuery);
                 if (location) params.append('location', location);
@@ -272,7 +268,6 @@ const Banner = () => {
         setLocation("");
     }, []);
 
-    // Voice search functions
     const startListening = useCallback(() => {
         if (recognitionRef.current && !isListening) {
             try {
@@ -301,7 +296,6 @@ const Banner = () => {
         }
     }, [isListening, startListening, stopListening]);
 
-    // Click outside handler for location dropdown
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
@@ -331,7 +325,6 @@ const Banner = () => {
         [searchQuery, location]
     );
 
-    // Cleanup swiper on unmount
     useEffect(() => {
         return () => {
             if (swiperRef.current) {
@@ -341,7 +334,6 @@ const Banner = () => {
         };
     }, []);
 
-    // Swiper event handlers
     const handleSlideChange = useCallback((swiper: SwiperType) => {
         setActiveSlide(swiper.activeIndex);
     }, []);
@@ -371,27 +363,19 @@ const Banner = () => {
             >
                 {sliderContent.map((slide, index) => (
                     <SwiperSlide key={index} className="relative">
-                        {/* Background image with zoom effect */}
                         <div className="absolute inset-0 overflow-hidden">
-                            <motion.div
-                                className="w-full h-full bg-cover bg-center"
+                            <div
+                                className="w-full h-full bg-cover bg-center transition-transform duration-[10s] ease-out will-change-transform"
                                 style={{
                                     backgroundImage: `url(${slide.image})`,
-                                }}
-                                initial={{ scale: 1.1 }}
-                                animate={{ scale: 1 }}
-                                transition={{
-                                    duration: 10,
-                                    ease: "easeOut",
+                                    transform: "scale(1.1)",
                                 }}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/20"></div>
                         </div>
 
-                        {/* Content overlay */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
-                            {/* Title and Description with fade-up animation */}
                             <AnimatePresence mode="wait">
                                 {activeSlide === index && (
                                     <motion.div
@@ -400,13 +384,22 @@ const Banner = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -50 }}
                                         transition={{ duration: 0.8 }}
-                                        className="text-center mb-8"
+                                        style={{
+                                            textAlign: "center",
+                                            marginBottom: "2rem",
+                                        }}
                                     >
                                         <motion.h1
                                             initial={{ opacity: 0, y: 30 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.8, delay: 0.2 }}
-                                            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight text-white"
+                                            style={{
+                                                fontSize: "clamp(1.5rem, 4vw, 3rem)",
+                                                fontWeight: "bold",
+                                                marginBottom: "1rem",
+                                                lineHeight: "1.2",
+                                                color: "white",
+                                            }}
                                         >
                                             {slide.title}
                                         </motion.h1>
@@ -415,7 +408,14 @@ const Banner = () => {
                                             initial={{ opacity: 0, y: 30 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.8, delay: 0.4 }}
-                                            className="mb-6 opacity-90 text-white max-w-2xl mx-auto"
+                                            style={{
+                                                marginBottom: "1.5rem",
+                                                opacity: 0.9,
+                                                color: "white",
+                                                maxWidth: "42rem",
+                                                marginLeft: "auto",
+                                                marginRight: "auto",
+                                            }}
                                         >
                                             {slide.description}
                                         </motion.p>
@@ -423,10 +423,8 @@ const Banner = () => {
                                 )}
                             </AnimatePresence>
 
-                            {/* Search Bar */}
                             <div className="w-full max-w-3xl">
                                 <div className="flex w-full items-center rounded-lg bg-orange-500/50 backdrop-blur-sm p-3 shadow-lg">
-                                    {/* Location Input */}
                                     <div className="relative w-2/5" ref={locationDropdownRef}>
                                         <div
                                             className="flex items-center pr-2 cursor-pointer"
@@ -462,7 +460,6 @@ const Banner = () => {
 
                                     <div className="h-6 border-l border-gray-300"></div>
 
-                                    {/* Search Input */}
                                     <div className="flex flex-1 items-center pl-4">
                                         <SearchIcon />
                                         <input
@@ -474,7 +471,6 @@ const Banner = () => {
                                             className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white"
                                         />
 
-                                        {/* Voice Search Button */}
                                         {isSpeechSupported && (
                                             <button
                                                 onClick={toggleListening}
@@ -491,7 +487,6 @@ const Banner = () => {
                                         )}
                                     </div>
 
-                                    {/* Clear Filters Button */}
                                     {hasActiveFilters && (
                                         <button
                                             onClick={clearAllFilters}
@@ -503,7 +498,6 @@ const Banner = () => {
                                     )}
                                 </div>
 
-                                {/* Voice Search Status */}
                                 {isListening && (
                                     <div className="mt-2 text-center">
                                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full border border-green-500/30">
@@ -521,7 +515,6 @@ const Banner = () => {
                                     </div>
                                 )}
 
-                                {/* Active Filters Display */}
                                 {hasActiveFilters && !isListening && (
                                     <div className="mt-3 flex flex-wrap gap-2 justify-center">
                                         {searchQuery && (
@@ -552,9 +545,7 @@ const Banner = () => {
                                 )}
                             </div>
 
-                            {/* CTA Buttons */}
                             <div className="flex flex-wrap gap-4 mt-8 justify-center">
-                                {/* Search Button */}
                                 {hasActiveFilters && (
                                     <button
                                         onClick={handleSearch}
@@ -564,7 +555,6 @@ const Banner = () => {
                                     </button>
                                 )}
 
-                                {/* Explore Menu Button */}
                                 <button
                                     onClick={handleExploreMenu}
                                     className="relative inline-flex cursor-pointer items-center px-12 py-3 overflow-hidden text-lg font-medium text-orange-600 border-2 border-orange-600 rounded-full hover:text-white group hover:bg-gray-50"
@@ -594,7 +584,6 @@ const Banner = () => {
                 ))}
             </Swiper>
 
-            {/* Scroll Down Button */}
             <div
                 className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 flex animate-bounce cursor-pointer items-center"
                 onClick={handleScrollDown}
